@@ -20,13 +20,24 @@
 !*.csproj
 !*.sln
 
+# MAUI project files (icons, fonts, platform manifests, launch settings)
+!*.svg
+!*.ttf
+!*.json
+!*.manifest
+!*.appxmanifest
+!*.plist
+!*.xcprivacy
+!*.xml
 
-#4. Ignore specific package-related directories 
-#   of Visual Studio Maui creation
+# Lab data: XML and XSL files
+!*.xsl
+!*.xslt
 
+# 4. Ignore build output and Visual Studio local data
 /bin
 /obj
-/Platforms
+/.vs
 
 # 5. Un-ignore this file itself so it can be committed
 !/.gitignore
