@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudentPerformanceXml.MainPage"
+             Title="Успішність студентів (XML)">
+
+    <Grid ColumnDefinitions="420,*" RowDefinitions="Auto,*"
+          Padding="16" ColumnSpacing="16" RowSpacing="12">
+        
+        <HorizontalStackLayout Grid.ColumnSpan="2" Spacing="8">
+            <Button Text="Відкрити XML" Clicked="OnOpenXmlClicked" />
+            <Button Text="Clear" Clicked="OnClearClicked" />
+            <Button Text="Вихід" Clicked="OnExitClicked" />
+            <Label x:Name="CurrentFileLabel" Text="Файл не вибрано"
+                   VerticalOptions="Center" Margin="12,0,0,0" />
+        </HorizontalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="10">
+
+                <Label Text="Атрибути студента" FontAttributes="Bold" FontSize="16" />
+                <VerticalStackLayout x:Name="AttributeFiltersLayout" Spacing="4" />
+
+                <Label Text="Дисципліна та оцінка" FontAttributes="Bold" FontSize="16" Margin="0,8,0,0" />
+                <HorizontalStackLayout Spacing="6">
+                    <CheckBox x:Name="SubjectCheckBox" VerticalOptions="Center" />
+                    <Picker x:Name="SubjectPicker" Title="Дисципліна" WidthRequest="320" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="6">
+                    <Label Text="Оцінка від" VerticalOptions="Center" />
+                    <Entry x:Name="MinMarkEntry" Keyboard="Numeric" WidthRequest="70" />
+                    <Label Text="до" VerticalOptions="Center" />
+                    <Entry x:Name="MaxMarkEntry" Keyboard="Numeric" WidthRequest="70" />
+                </HorizontalStackLayout>
+
+                <Label Text="Метод аналізу" FontAttributes="Bold" FontSize="16" Margin="0,8,0,0" />
+
+                <RadioButton x:Name="SaxRadio" Content="SAX API (згодом)" GroupName="AnalysisMethod" IsEnabled="False" />
+                <RadioButton x:Name="DomRadio" Content="DOM API (згодом)" GroupName="AnalysisMethod" IsEnabled="False" />
+                <RadioButton x:Name="LinqRadio" Content="LINQ to XML" GroupName="AnalysisMethod" IsChecked="True" />
+
+                <Button Text="Пошук" Clicked="OnSearchClicked" Margin="0,8,0,0" />
+                <Button Text="Трансформувати в HTML" Clicked="OnTransformClicked" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border Grid.Row="1" Grid.Column="1" Padding="12" Stroke="Gray" StrokeThickness="1">
+            <ScrollView>
+                <Label x:Name="ResultsLabel" Text="Відкрийте XML-файл, щоб почати." />
+            </ScrollView>
+        </Border>
+    </Grid>
+</ContentPage>

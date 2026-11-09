@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Успішність студентів. Кількість атрибутів у різних Student навмисно різна. -->
+<StudentPerformance>
+  <Student FullName="Іваненко Іван Іванович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра теорії та технології програмування" Group="К-21" Course="2">
+    <Subject Name="Математичний аналіз" Mark="87"/>
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="95"/>
+    <Subject Name="Алгебра і геометрія" Mark="78"/>
+  </Student>
+  <Student FullName="Петренко Олена Петрівна" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра математичної інформатики" Group="К-22">
+    <Subject Name="Математичний аналіз" Mark="92"/>
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="64"/>
+  </Student>
+  <Student FullName="Коваленко Андрій Сергійович" Faculty="Механіко-математичний факультет" Department="Кафедра алгебри та комп'ютерної математики" Group="М-21" Course="2" Scholarship="Так">
+    <Subject Name="Математичний аналіз" Mark="98"/>
+    <Subject Name="Алгебра і геометрія" Mark="96"/>
+    <Subject Name="Теорія ймовірностей" Mark="90"/>
+  </Student>
+  <Student FullName="Шевчук Марія Олегівна" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра теорії та технології програмування" Group="К-21" Course="2" Scholarship="Так">
+    <Subject Name="Математичний аналіз" Mark="91"/>
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="100"/>
+    <Subject Name="Математична логіка" Mark="88"/>
+  </Student>
+  <Student FullName="Бондаренко Дмитро Васильович" Faculty="Механіко-математичний факультет" Department="Кафедра математичного аналізу" Course="3">
+    <Subject Name="Теорія ймовірностей" Mark="61"/>
+    <Subject Name="Диференціальні рівняння" Mark="73"/>
+  </Student>
+  <Student FullName="Мельник Софія Андріївна" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра математичної інформатики" Group="К-22" Course="2">
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="82"/>
+    <Subject Name="Математична логіка" Mark="57"/>
+    <Subject Name="Алгебра і геометрія" Mark="70"/>
+  </Student>
+  <Student FullName="Ткаченко Олександр Ігорович" Faculty="Механіко-математичний факультет" Department="Кафедра алгебри та комп'ютерної математики" Group="М-21" Course="2">
+    <Subject Name="Математичний аналіз" Mark="66"/>
+    <Subject Name="Алгебра і геометрія" Mark="75"/>
+  </Student>
+</StudentPerformance>
