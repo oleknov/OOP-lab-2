@@ -129,6 +129,9 @@ public partial class MainPage : ContentPage
         {
             IXmlAnalyzer analyzer = CreateSelectedAnalyzer();  
             _lastResults = analyzer.AnalyzeData(_currentXmlContent, parameters);
+            EventJournal.GetInstance().RecordEvent(
+                $"Параметри: {parameters}. Метод: {analyzer.MethodName}. Знайдено: {_lastResults.Count}",
+                EventPriority.Filtering);
             DisplayResults(_lastResults, analyzer, parameters);
         }
         catch (Exception ex)
@@ -224,6 +227,8 @@ public partial class MainPage : ContentPage
                 await ShowError($"Не вдалося записати файл {outputPath}");
                 return;
             }
+
+            EventJournal.GetInstance().RecordEvent($"Збережено у файл {fileName}", EventPriority.Transformation);
 
             await Launcher.Default.OpenAsync(new OpenFileRequest("HTML", new ReadOnlyFile(outputPath)));
         }
