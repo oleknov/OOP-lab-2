@@ -169,6 +169,7 @@ public partial class MainPage : ContentPage
     private IXmlAnalyzer CreateSelectedAnalyzer()
     {
         if (SaxRadio.IsChecked) return new SaxAnalyzer();
+        if (DomRadio.IsChecked) return new DomAnalyzer();
         return new LinqAnalyzer();
     }
 
@@ -176,6 +177,8 @@ public partial class MainPage : ContentPage
     {
         var sb = new StringBuilder();
         sb.AppendLine($"Метод: {analyzer.MethodName}");
+        if (analyzer is DomAnalyzer dom)
+            sb.AppendLine($"XPath: {dom.LastXPath}");
         sb.AppendLine($"Параметри: {parameters}");
         sb.AppendLine($"Знайдено студентів: {students.Count}");
         sb.AppendLine();

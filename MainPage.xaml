@@ -36,7 +36,7 @@
                 <Label Text="Метод аналізу" FontAttributes="Bold" FontSize="16" Margin="0,8,0,0" />
 
                 <RadioButton x:Name="SaxRadio" Content="SAX API" GroupName="AnalysisMethod"/>
-                <RadioButton x:Name="DomRadio" Content="DOM API (згодом)" GroupName="AnalysisMethod" IsEnabled="False" />
+                <RadioButton x:Name="DomRadio" Content="DOM API" GroupName="AnalysisMethod"/>
                 <RadioButton x:Name="LinqRadio" Content="LINQ to XML" GroupName="AnalysisMethod" IsChecked="True" />
 
                 <Button Text="Пошук" Clicked="OnSearchClicked" Margin="0,8,0,0" />
