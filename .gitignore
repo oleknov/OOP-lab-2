@@ -39,5 +39,9 @@
 /obj
 /.vs
 
+# Google OAuth secrets and tokens
+Resources/Raw/credentials.json
+client_secret*.json
+
 # 5. Un-ignore this file itself so it can be committed
 !/.gitignore

@@ -13,6 +13,10 @@ namespace StudentPerformanceXml;
 
 public partial class MainPage : ContentPage
 {
+    private const string LocalDiskOption = "Локальний диск";
+    private const string DriveOption = "Google Drive";
+    private const string CancelOption = "Скасувати";
+
     private static readonly FilePickerFileType XmlFileType = new(new Dictionary<DevicePlatform, IEnumerable<string>>
     {
         { DevicePlatform.WinUI, new[] { ".xml" } },
@@ -27,13 +31,14 @@ public partial class MainPage : ContentPage
         { DevicePlatform.Android, new[] { "text/xml", "application/xml", "application/xslt+xml" } },
     });
 
-    private readonly IFileStorage _storage = new LocalDiskStorage();
+    private readonly IFileStorage _localStorage = new LocalDiskStorage();
+    private readonly GoogleDriveStorage _driveStorage = new();
     private readonly XmlAttributeParser _attributeParser = new();
     private readonly XslTransformer _transformer = new();
 
     private readonly Dictionary<string, (CheckBox Check, Picker Picker)> _attributeFilters = new();
 
-    private string? _currentXmlPath;
+    private string? _currentFileName;
     private string? _currentXmlContent;
     private string _rootName = "StudentPerformance";
     private List<Student>? _lastResults;
@@ -54,6 +59,8 @@ public partial class MainPage : ContentPage
     }
 
     private async void OnOpenXmlClicked(object sender, EventArgs e) => await RunBusyAsync(OpenXmlAsync);
+
+    private async void OnOpenDriveClicked(object sender, EventArgs e) => await RunBusyAsync(OpenXmlFromDriveAsync);
 
     private async void OnSearchClicked(object sender, EventArgs e) => await RunBusyAsync(SearchAsync);
 
@@ -86,7 +93,7 @@ public partial class MainPage : ContentPage
     {
         _isBusy = busy;
 
-        foreach (Button button in new[] { OpenXmlButton, ClearButton, SearchButton, TransformButton, SaveXmlButton, SaveHtmlButton })
+        foreach (Button button in new[] { OpenXmlButton, OpenDriveButton, ClearButton, SearchButton, TransformButton, SaveXmlButton, SaveHtmlButton })
             button.IsEnabled = !busy;
 
         ParametersPanel.InputTransparent = busy;
@@ -103,7 +110,21 @@ public partial class MainPage : ContentPage
         });
         if (file is null) return;
 
-        byte[] bytes = await _storage.ReadBytesAsync(file.FullPath);
+        byte[] bytes = await _localStorage.ReadBytesAsync(file.FullPath);
+        await LoadXmlFileAsync(bytes, file.FileName, file.FileName);
+    }
+
+    private async Task OpenXmlFromDriveAsync()
+    {
+        DriveEntry? entry = await ChooseDriveFileAsync("XML-файли на Google Drive", ".xml");
+        if (entry is null) return;
+
+        byte[] bytes = await _driveStorage.ReadBytesAsync(entry.Id);
+        await LoadXmlFileAsync(bytes, entry.Name, $"{entry.Name} (Google Drive)");
+    }
+
+    private async Task LoadXmlFileAsync(byte[] bytes, string fileName, string displayName)
+    {
         LoadedXml loaded = await Task.Run(() => LoadXml(bytes));
 
         if (loaded.Error is not null)
@@ -112,13 +133,13 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        _currentXmlPath = file.FullPath;
+        _currentFileName = fileName;
         _currentXmlContent = loaded.Content;
         _rootName = loaded.RootName;
 
         LoadAvailableAttributes(loaded.Attributes, loaded.Subjects);
         ClearOutputAndParameters();
-        CurrentFileLabel.Text = file.FileName;
+        CurrentFileLabel.Text = displayName;
         ResultsLabel.Text = "Файл завантажено. Оберіть параметри та натисніть «Пошук».";
     }
 
@@ -264,7 +285,7 @@ public partial class MainPage : ContentPage
 
     private async Task TransformAsync()
     {
-        if (_currentXmlContent is null || _currentXmlPath is null)
+        if (_currentXmlContent is null || _currentFileName is null)
         {
             await DisplayAlert("Увага", "Спочатку відкрийте XML-файл.", "OK");
             return;
@@ -272,14 +293,8 @@ public partial class MainPage : ContentPage
 
         try
         {
-            FileResult? xslFile = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Оберіть XSL-файл",
-                FileTypes = XslFileType
-            });
-            if (xslFile is null) return;
-
-            string xslContent = XmlFileDecoder.Decode(await _storage.ReadBytesAsync(xslFile.FullPath));
+            string? xslContent = await PickXslAsync();
+            if (xslContent is null) return;
 
             string sourceXml = _lastResults is null
                 ? _currentXmlContent
@@ -287,10 +302,10 @@ public partial class MainPage : ContentPage
 
             string html = await Task.Run(() => _transformer.Transform(sourceXml, xslContent));
 
-            string fileName = $"{Path.GetFileNameWithoutExtension(_currentXmlPath)}_{DateTime.Now:yyyyMMdd_HHmmss}.html";
+            string fileName = $"{Path.GetFileNameWithoutExtension(_currentFileName)}_{DateTime.Now:yyyyMMdd_HHmmss}.html";
             string outputPath = Path.Combine(AppPaths.OutputDirectory, fileName);
 
-            if (!await _storage.WriteAsync(outputPath, html))
+            if (!await _localStorage.WriteAsync(outputPath, html))
             {
                 await ShowError($"Не вдалося записати файл {outputPath}");
                 return;
@@ -314,28 +329,30 @@ public partial class MainPage : ContentPage
     {
         if (!await EnsureResultsToSaveAsync()) return;
 
-        await SaveFilteredAsync(new XmlSaveManager(_storage));
+        IFileStorage? storage = await ChooseTargetStorageAsync();
+        if (storage is null) return;
+
+        await SaveFilteredAsync(new XmlSaveManager(storage), storage);
     }
 
     private async Task SaveHtmlAsync()
     {
         if (!await EnsureResultsToSaveAsync()) return;
 
-        FileResult? xslFile = await FilePicker.Default.PickAsync(new PickOptions
-        {
-            PickerTitle = "Оберіть XSL-файл",
-            FileTypes = XslFileType
-        });
-        if (xslFile is null) return;
+        IFileStorage? storage = await ChooseTargetStorageAsync();
+        if (storage is null) return;
 
-        var manager = new HtmlSaveManager(_storage);
-        manager.SetXsl(XmlFileDecoder.Decode(await _storage.ReadBytesAsync(xslFile.FullPath)));
-        await SaveFilteredAsync(manager);
+        string? xslContent = await PickXslAsync();
+        if (xslContent is null) return;
+
+        var manager = new HtmlSaveManager(storage);
+        manager.SetXsl(xslContent);
+        await SaveFilteredAsync(manager, storage);
     }
 
     private async Task<bool> EnsureResultsToSaveAsync()
     {
-        if (_currentXmlPath is null || _lastResults is null)
+        if (_currentFileName is null || _lastResults is null)
         {
             await DisplayAlert("Увага", "Спочатку виконайте пошук.", "OK");
             return false;
@@ -350,22 +367,30 @@ public partial class MainPage : ContentPage
         return true;
     }
 
-    private async Task SaveFilteredAsync(SaveManager manager)
+    private async Task SaveFilteredAsync(SaveManager manager, IFileStorage storage)
     {
-        if (_currentXmlPath is null || _lastResults is null) return;
+        if (_currentFileName is null || _lastResults is null) return;
+
+        bool toDrive = storage is GoogleDriveStorage;
 
         try
         {
-            string fileName = $"{Path.GetFileNameWithoutExtension(_currentXmlPath)}_filtered_{DateTime.Now:yyyyMMdd_HHmmss}";
-            manager.OpenFile(Path.Combine(AppPaths.OutputDirectory, fileName));
+            string fileName = $"{Path.GetFileNameWithoutExtension(_currentFileName)}_filtered_{DateTime.Now:yyyyMMdd_HHmmss}";
+            manager.OpenFile(toDrive ? fileName : Path.Combine(AppPaths.OutputDirectory, fileName));
             manager.SetData(_lastResults, _rootName);
 
             bool saved = await Task.Run(() => manager.SaveAsync());
 
-            if (saved)
-                await DisplayAlert("Збережено", $"Фрагмент збережено у файл:\n{manager.OpenedFilePath}", "OK");
-            else
+            if (!saved)
+            {
                 await ShowError($"Не вдалося записати файл {manager.OpenedFilePath}");
+                return;
+            }
+
+            string message = toDrive
+                ? $"Фрагмент збережено на Google Drive у файл:\n{Path.GetFileName(manager.OpenedFilePath)}"
+                : $"Фрагмент збережено у файл:\n{manager.OpenedFilePath}";
+            await DisplayAlert("Збережено", message, "OK");
         }
         catch (XsltException ex)
         {
@@ -375,6 +400,64 @@ public partial class MainPage : ContentPage
         {
             await ShowError($"Некоректний XSL: {ex.Message}");
         }
+    }
+
+    private async Task<string?> PickXslAsync()
+    {
+        string? source = await ChooseStorageOptionAsync("Звідки взяти XSL-файл?");
+
+        if (source == LocalDiskOption)
+        {
+            FileResult? file = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Оберіть XSL-файл",
+                FileTypes = XslFileType
+            });
+            return file is null ? null : XmlFileDecoder.Decode(await _localStorage.ReadBytesAsync(file.FullPath));
+        }
+
+        if (source == DriveOption)
+        {
+            DriveEntry? entry = await ChooseDriveFileAsync("XSL-файли на Google Drive", ".xsl", ".xslt");
+            return entry is null ? null : XmlFileDecoder.Decode(await _driveStorage.ReadBytesAsync(entry.Id));
+        }
+
+        return null;
+    }
+
+    private async Task<IFileStorage?> ChooseTargetStorageAsync()
+    {
+        string? choice = await ChooseStorageOptionAsync("Куди зберегти фрагмент?");
+        return choice switch
+        {
+            LocalDiskOption => _localStorage,
+            DriveOption => _driveStorage,
+            _ => null
+        };
+    }
+
+    private async Task<string?> ChooseStorageOptionAsync(string title)
+    {
+        string? choice = await DisplayActionSheet(title, CancelOption, null, LocalDiskOption, DriveOption);
+        return choice is LocalDiskOption or DriveOption ? choice : null;
+    }
+
+    private async Task<DriveEntry?> ChooseDriveFileAsync(string title, params string[] extensions)
+    {
+        IReadOnlyList<DriveEntry> files = await _driveStorage.ListFilesAsync(extensions);
+        if (files.Count == 0)
+        {
+            await DisplayAlert("Google Drive", $"Файлів {string.Join(", ", extensions)} на Google Drive не знайдено.", "OK");
+            return null;
+        }
+
+        string[] labels = files
+            .Select((f, i) => files.Count(other => other.Name == f.Name) > 1 ? $"{f.Name} [{i + 1}]" : f.Name)
+            .ToArray();
+
+        string? choice = await DisplayActionSheet(title, CancelOption, null, labels);
+        int index = choice is null ? -1 : Array.IndexOf(labels, choice);
+        return index < 0 ? null : files[index];
     }
 
     private void OnClearClicked(object sender, EventArgs e) => ClearOutputAndParameters();

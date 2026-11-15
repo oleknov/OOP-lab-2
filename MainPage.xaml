@@ -9,6 +9,7 @@
 
         <HorizontalStackLayout Grid.ColumnSpan="2" Spacing="8">
             <Button x:Name="OpenXmlButton" Text="Відкрити XML" Clicked="OnOpenXmlClicked" />
+            <Button x:Name="OpenDriveButton" Text="Відкрити з Google Drive" Clicked="OnOpenDriveClicked" />
             <Button x:Name="ClearButton" Text="Clear" Clicked="OnClearClicked" />
             <Button Text="Вихід" Clicked="OnExitClicked" BackgroundColor="#C62828" TextColor="White" />
             <Label x:Name="CurrentFileLabel" Text="Файл не вибрано"
