@@ -168,6 +168,7 @@ public partial class MainPage : ContentPage
 
     private IXmlAnalyzer CreateSelectedAnalyzer()
     {
+        if (SaxRadio.IsChecked) return new SaxAnalyzer();
         return new LinqAnalyzer();
     }
 
