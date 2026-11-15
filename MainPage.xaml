@@ -34,14 +34,14 @@
                 </HorizontalStackLayout>
 
                 <Label Text="Метод аналізу" FontAttributes="Bold" FontSize="16" Margin="0,8,0,0" />
-
-                <RadioButton x:Name="SaxRadio" Content="SAX API" GroupName="AnalysisMethod"/>
-                <RadioButton x:Name="DomRadio" Content="DOM API" GroupName="AnalysisMethod"/>
+                <RadioButton x:Name="SaxRadio" Content="SAX API" GroupName="AnalysisMethod" />
+                <RadioButton x:Name="DomRadio" Content="DOM API" GroupName="AnalysisMethod" />
                 <RadioButton x:Name="LinqRadio" Content="LINQ to XML" GroupName="AnalysisMethod" IsChecked="True" />
 
                 <Button Text="Пошук" Clicked="OnSearchClicked" Margin="0,8,0,0" />
                 <Button Text="Трансформувати в HTML" Clicked="OnTransformClicked" />
                 <Button Text="Зберегти як XML" Clicked="OnSaveXmlClicked" />
+                <Button Text="Зберегти як HTML" Clicked="OnSaveHtmlClicked" />
             </VerticalStackLayout>
         </ScrollView>
 

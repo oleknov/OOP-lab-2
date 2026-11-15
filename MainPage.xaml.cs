@@ -248,22 +248,54 @@ public partial class MainPage : ContentPage
 
     private async void OnSaveXmlClicked(object sender, EventArgs e)
     {
+        if (!await EnsureResultsToSaveAsync()) return;
+
         await SaveFilteredAsync(new XmlSaveManager(_storage));
     }
 
-    private async Task SaveFilteredAsync(SaveManager manager)
+    private async void OnSaveHtmlClicked(object sender, EventArgs e)
+    {
+        if (!await EnsureResultsToSaveAsync()) return;
+
+        try
+        {
+            FileResult? xslFile = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Оберіть XSL-файл",
+                FileTypes = XslFileType
+            });
+            if (xslFile is null) return;
+
+            var manager = new HtmlSaveManager(_storage);
+            manager.SetXsl(XmlFileDecoder.Decode(await _storage.ReadBytesAsync(xslFile.FullPath)));
+            await SaveFilteredAsync(manager);
+        }
+        catch (Exception ex)
+        {
+            await ShowError(ex.Message);
+        }
+    }
+
+    private async Task<bool> EnsureResultsToSaveAsync()
     {
         if (_currentXmlPath is null || _lastResults is null)
         {
             await DisplayAlert("Увага", "Спочатку виконайте пошук.", "OK");
-            return;
+            return false;
         }
 
         if (_lastResults.Count == 0)
         {
             await DisplayAlert("Увага", "Немає даних для збереження: пошук нічого не знайшов.", "OK");
-            return;
+            return false;
         }
+
+        return true;
+    }
+
+    private async Task SaveFilteredAsync(SaveManager manager)
+    {
+        if (_currentXmlPath is null || _lastResults is null) return;
 
         try
         {
@@ -275,6 +307,14 @@ public partial class MainPage : ContentPage
                 await DisplayAlert("Збережено", $"Фрагмент збережено у файл:\n{manager.OpenedFilePath}", "OK");
             else
                 await ShowError($"Не вдалося записати файл {manager.OpenedFilePath}");
+        }
+        catch (XsltException ex)
+        {
+            await ShowError($"Помилка в XSL-файлі: {ex.Message}");
+        }
+        catch (XmlException ex)
+        {
+            await ShowError($"Некоректний XSL: {ex.Message}");
         }
         catch (Exception ex)
         {
