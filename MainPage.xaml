@@ -8,15 +8,17 @@
           Padding="16" ColumnSpacing="16" RowSpacing="12">
 
         <HorizontalStackLayout Grid.ColumnSpan="2" Spacing="8">
-            <Button Text="Відкрити XML" Clicked="OnOpenXmlClicked" />
-            <Button Text="Clear" Clicked="OnClearClicked" />
+            <Button x:Name="OpenXmlButton" Text="Відкрити XML" Clicked="OnOpenXmlClicked" />
+            <Button x:Name="ClearButton" Text="Clear" Clicked="OnClearClicked" />
             <Button Text="Вихід" Clicked="OnExitClicked" BackgroundColor="#C62828" TextColor="White" />
             <Label x:Name="CurrentFileLabel" Text="Файл не вибрано"
                    VerticalOptions="Center" Margin="12,0,0,0" />
+            <ActivityIndicator x:Name="BusyIndicator" IsRunning="False" IsVisible="False"
+                               VerticalOptions="Center" HeightRequest="24" WidthRequest="24" />
         </HorizontalStackLayout>
 
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Spacing="10">
+            <VerticalStackLayout x:Name="ParametersPanel" Spacing="10" Padding="0,0,18,0">
 
                 <Label Text="Атрибути студента" FontAttributes="Bold" FontSize="16" />
                 <VerticalStackLayout x:Name="AttributeFiltersLayout" Spacing="4" />
@@ -38,10 +40,10 @@
                 <RadioButton x:Name="DomRadio" Content="DOM API" GroupName="AnalysisMethod" />
                 <RadioButton x:Name="LinqRadio" Content="LINQ to XML" GroupName="AnalysisMethod" IsChecked="True" />
 
-                <Button Text="Пошук" Clicked="OnSearchClicked" Margin="0,8,0,0" />
-                <Button Text="Трансформувати в HTML" Clicked="OnTransformClicked" />
-                <Button Text="Зберегти як XML" Clicked="OnSaveXmlClicked" />
-                <Button Text="Зберегти як HTML" Clicked="OnSaveHtmlClicked" />
+                <Button x:Name="SearchButton" Text="Пошук" Clicked="OnSearchClicked" Margin="0,8,0,0" />
+                <Button x:Name="TransformButton" Text="Трансформувати в HTML" Clicked="OnTransformClicked" />
+                <Button x:Name="SaveXmlButton" Text="Зберегти як XML" Clicked="OnSaveXmlClicked" />
+                <Button x:Name="SaveHtmlButton" Text="Зберегти як HTML" Clicked="OnSaveHtmlClicked" />
             </VerticalStackLayout>
         </ScrollView>
 

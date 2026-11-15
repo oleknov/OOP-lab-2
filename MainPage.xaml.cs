@@ -37,62 +37,123 @@ public partial class MainPage : ContentPage
     private string? _currentXmlContent;
     private string _rootName = "StudentPerformance";
     private List<Student>? _lastResults;
+    private bool _isBusy;
 
     public MainPage()
     {
         InitializeComponent();
+
         SubjectPicker.SelectedIndexChanged += (_, _) =>
         {
             if (SubjectPicker.SelectedIndex >= 0) SubjectCheckBox.IsChecked = true;
+            InvalidateResults();
         };
+        SubjectCheckBox.CheckedChanged += (_, _) => InvalidateResults();
+        MinMarkEntry.TextChanged += (_, _) => InvalidateResults();
+        MaxMarkEntry.TextChanged += (_, _) => InvalidateResults();
     }
 
-    private async void OnOpenXmlClicked(object sender, EventArgs e)
+    private async void OnOpenXmlClicked(object sender, EventArgs e) => await RunBusyAsync(OpenXmlAsync);
+
+    private async void OnSearchClicked(object sender, EventArgs e) => await RunBusyAsync(SearchAsync);
+
+    private async void OnTransformClicked(object sender, EventArgs e) => await RunBusyAsync(TransformAsync);
+
+    private async void OnSaveXmlClicked(object sender, EventArgs e) => await RunBusyAsync(SaveXmlAsync);
+
+    private async void OnSaveHtmlClicked(object sender, EventArgs e) => await RunBusyAsync(SaveHtmlAsync);
+
+    private async Task RunBusyAsync(Func<Task> action)
     {
+        if (_isBusy) return;
+
+        SetBusy(true);
         try
         {
-            FileResult? file = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Оберіть XML-файл",
-                FileTypes = XmlFileType
-            });
-            if (file is null) return;
-
-            string content = XmlFileDecoder.Decode(await _storage.ReadBytesAsync(file.FullPath));
-            if (!_attributeParser.ValidateDocumentStructure(content, out string error))
-            {
-                await DisplayAlert("Некоректний файл", error, "OK");
-                return;
-            }
-
-            _currentXmlPath = file.FullPath;
-            _currentXmlContent = content;
-            _rootName = _attributeParser.GetRootName(content);
-
-            LoadAvailableAttributes(content);
-            ClearOutputAndParameters();
-            CurrentFileLabel.Text = file.FileName;
-            ResultsLabel.Text = "Файл завантажено. Оберіть параметри та натисніть «Пошук».";
+            await action();
         }
         catch (Exception ex)
         {
             await ShowError(ex.Message);
         }
+        finally
+        {
+            SetBusy(false);
+        }
     }
-    private void LoadAvailableAttributes(string xmlContent)
+
+    private void SetBusy(bool busy)
+    {
+        _isBusy = busy;
+
+        foreach (Button button in new[] { OpenXmlButton, ClearButton, SearchButton, TransformButton, SaveXmlButton, SaveHtmlButton })
+            button.IsEnabled = !busy;
+
+        ParametersPanel.InputTransparent = busy;
+        BusyIndicator.IsRunning = busy;
+        BusyIndicator.IsVisible = busy;
+    }
+
+    private async Task OpenXmlAsync()
+    {
+        FileResult? file = await FilePicker.Default.PickAsync(new PickOptions
+        {
+            PickerTitle = "Оберіть XML-файл",
+            FileTypes = XmlFileType
+        });
+        if (file is null) return;
+
+        byte[] bytes = await _storage.ReadBytesAsync(file.FullPath);
+        LoadedXml loaded = await Task.Run(() => LoadXml(bytes));
+
+        if (loaded.Error is not null)
+        {
+            await DisplayAlert("Некоректний файл", loaded.Error, "OK");
+            return;
+        }
+
+        _currentXmlPath = file.FullPath;
+        _currentXmlContent = loaded.Content;
+        _rootName = loaded.RootName;
+
+        LoadAvailableAttributes(loaded.Attributes, loaded.Subjects);
+        ClearOutputAndParameters();
+        CurrentFileLabel.Text = file.FileName;
+        ResultsLabel.Text = "Файл завантажено. Оберіть параметри та натисніть «Пошук».";
+    }
+
+    private LoadedXml LoadXml(byte[] bytes)
+    {
+        string content = XmlFileDecoder.Decode(bytes);
+
+        if (!_attributeParser.ValidateDocumentStructure(content, out string error))
+            return new LoadedXml(content, error, "", new(), new());
+
+        return new LoadedXml(
+            content,
+            null,
+            _attributeParser.GetRootName(content),
+            _attributeParser.ExtractAvailableAttributes(content),
+            _attributeParser.ExtractSubjectNames(content));
+    }
+
+    private void LoadAvailableAttributes(Dictionary<string, List<string>> attributes, List<string> subjects)
     {
         AttributeFiltersLayout.Children.Clear();
         _attributeFilters.Clear();
 
-        foreach (var (attribute, values) in _attributeParser.ExtractAvailableAttributes(xmlContent))
+        foreach (var (attribute, values) in attributes)
         {
             var check = new CheckBox { VerticalOptions = LayoutOptions.Center };
             var label = new Label { Text = attribute, WidthRequest = 100, VerticalOptions = LayoutOptions.Center };
             var picker = new Picker { ItemsSource = values, WidthRequest = 260, Title = attribute };
+
             picker.SelectedIndexChanged += (_, _) =>
             {
                 if (picker.SelectedIndex >= 0) check.IsChecked = true;
+                InvalidateResults();
             };
+            check.CheckedChanged += (_, _) => InvalidateResults();
 
             var row = new HorizontalStackLayout { Spacing = 6 };
             row.Children.Add(check);
@@ -103,10 +164,19 @@ public partial class MainPage : ContentPage
             _attributeFilters[attribute] = (check, picker);
         }
 
-        SubjectPicker.ItemsSource = _attributeParser.ExtractSubjectNames(xmlContent);
+        SubjectPicker.ItemsSource = subjects;
     }
 
-    private async void OnSearchClicked(object sender, EventArgs e)
+    private void InvalidateResults()
+    {
+        if (_lastResults is null) return;
+
+        _lastResults = null;
+        ResultsLabel.Text = "Параметри пошуку змінено. Натисніть «Пошук», щоб оновити результати." +
+                            Environment.NewLine + Environment.NewLine + ResultsLabel.Text;
+    }
+
+    private async Task SearchAsync()
     {
         if (_currentXmlContent is null)
         {
@@ -125,19 +195,17 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        try
-        {
-            IXmlAnalyzer analyzer = CreateSelectedAnalyzer();
-            _lastResults = analyzer.AnalyzeData(_currentXmlContent, parameters);
-            EventJournal.GetInstance().RecordEvent(
-                $"Параметри: {parameters}. Метод: {analyzer.MethodName}. Знайдено: {_lastResults.Count}",
-                EventPriority.Filtering);
-            DisplayResults(_lastResults, analyzer, parameters);
-        }
-        catch (Exception ex)
-        {
-            await ShowError(ex.Message);
-        }
+        IXmlAnalyzer analyzer = CreateSelectedAnalyzer();
+        string xmlContent = _currentXmlContent;
+        List<Student> results = await Task.Run(() => analyzer.AnalyzeData(xmlContent, parameters));
+
+        _lastResults = results;
+
+        EventJournal.GetInstance().RecordEvent(
+            $"Параметри: {parameters}. Метод: {analyzer.MethodName}. Знайдено: {results.Count}",
+            EventPriority.Filtering);
+
+        DisplayResults(results, analyzer, parameters);
     }
 
     private SearchParameters BuildSearchParameters()
@@ -194,7 +262,7 @@ public partial class MainPage : ContentPage
             : sb.ToString();
     }
 
-    private async void OnTransformClicked(object sender, EventArgs e)
+    private async Task TransformAsync()
     {
         if (_currentXmlContent is null || _currentXmlPath is null)
         {
@@ -217,7 +285,7 @@ public partial class MainPage : ContentPage
                 ? _currentXmlContent
                 : StudentsXmlBuilder.Build(_lastResults, _rootName);
 
-            string html = _transformer.Transform(sourceXml, xslContent);
+            string html = await Task.Run(() => _transformer.Transform(sourceXml, xslContent));
 
             string fileName = $"{Path.GetFileNameWithoutExtension(_currentXmlPath)}_{DateTime.Now:yyyyMMdd_HHmmss}.html";
             string outputPath = Path.Combine(AppPaths.OutputDirectory, fileName);
@@ -240,40 +308,29 @@ public partial class MainPage : ContentPage
         {
             await ShowError($"Некоректний XML/XSL: {ex.Message}");
         }
-        catch (Exception ex)
-        {
-            await ShowError(ex.Message);
-        }
     }
 
-    private async void OnSaveXmlClicked(object sender, EventArgs e)
+    private async Task SaveXmlAsync()
     {
         if (!await EnsureResultsToSaveAsync()) return;
 
         await SaveFilteredAsync(new XmlSaveManager(_storage));
     }
 
-    private async void OnSaveHtmlClicked(object sender, EventArgs e)
+    private async Task SaveHtmlAsync()
     {
         if (!await EnsureResultsToSaveAsync()) return;
 
-        try
+        FileResult? xslFile = await FilePicker.Default.PickAsync(new PickOptions
         {
-            FileResult? xslFile = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Оберіть XSL-файл",
-                FileTypes = XslFileType
-            });
-            if (xslFile is null) return;
+            PickerTitle = "Оберіть XSL-файл",
+            FileTypes = XslFileType
+        });
+        if (xslFile is null) return;
 
-            var manager = new HtmlSaveManager(_storage);
-            manager.SetXsl(XmlFileDecoder.Decode(await _storage.ReadBytesAsync(xslFile.FullPath)));
-            await SaveFilteredAsync(manager);
-        }
-        catch (Exception ex)
-        {
-            await ShowError(ex.Message);
-        }
+        var manager = new HtmlSaveManager(_storage);
+        manager.SetXsl(XmlFileDecoder.Decode(await _storage.ReadBytesAsync(xslFile.FullPath)));
+        await SaveFilteredAsync(manager);
     }
 
     private async Task<bool> EnsureResultsToSaveAsync()
@@ -303,7 +360,9 @@ public partial class MainPage : ContentPage
             manager.OpenFile(Path.Combine(AppPaths.OutputDirectory, fileName));
             manager.SetData(_lastResults, _rootName);
 
-            if (await manager.SaveAsync())
+            bool saved = await Task.Run(() => manager.SaveAsync());
+
+            if (saved)
                 await DisplayAlert("Збережено", $"Фрагмент збережено у файл:\n{manager.OpenedFilePath}", "OK");
             else
                 await ShowError($"Не вдалося записати файл {manager.OpenedFilePath}");
@@ -315,10 +374,6 @@ public partial class MainPage : ContentPage
         catch (XmlException ex)
         {
             await ShowError($"Некоректний XSL: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            await ShowError(ex.Message);
         }
     }
 
@@ -354,4 +409,11 @@ public partial class MainPage : ContentPage
     }
 
     private Task ShowError(string message) => DisplayAlert("Помилка", message, "OK");
+
+    private sealed record LoadedXml(
+        string Content,
+        string? Error,
+        string RootName,
+        Dictionary<string, List<string>> Attributes,
+        List<string> Subjects);
 }
