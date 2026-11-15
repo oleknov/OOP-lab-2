@@ -4,7 +4,7 @@ namespace StudentPerformanceXml.Storage;
 
 public class LocalDiskStorage : IFileStorage
 {
-    public Task<string> ReadAsync(string path) => File.ReadAllTextAsync(path);
+    public Task<byte[]> ReadBytesAsync(string path) => File.ReadAllBytesAsync(path);
 
     public async Task<bool> WriteAsync(string path, string content)
     {

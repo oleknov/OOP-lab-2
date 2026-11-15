@@ -8,6 +8,9 @@ public static class StudentXmlNames
     public const string MarkAttribute = "Mark";
     public const string FullNameAttribute = "FullName";
 
+    public const int MinMarkValue = 0;
+    public const int MaxMarkValue = 100;
+
     public static int ParseMark(string? value) =>
         int.TryParse(value, out int mark) ? mark : 0;
 }

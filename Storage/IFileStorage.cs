@@ -2,7 +2,7 @@ namespace StudentPerformanceXml.Storage;
 
 public interface IFileStorage
 {
-    Task<string> ReadAsync(string path);
+    Task<byte[]> ReadBytesAsync(string path);
 
     Task<bool> WriteAsync(string path, string content);
 }

@@ -58,7 +58,7 @@ public partial class MainPage : ContentPage
             });
             if (file is null) return;
 
-            string content = await _storage.ReadAsync(file.FullPath);
+            string content = XmlFileDecoder.Decode(await _storage.ReadBytesAsync(file.FullPath));
             if (!_attributeParser.ValidateDocumentStructure(content, out string error))
             {
                 await DisplayAlert("Некоректний файл", error, "OK");
@@ -211,7 +211,7 @@ public partial class MainPage : ContentPage
             });
             if (xslFile is null) return;
 
-            string xslContent = await _storage.ReadAsync(xslFile.FullPath);
+            string xslContent = XmlFileDecoder.Decode(await _storage.ReadBytesAsync(xslFile.FullPath));
 
             string sourceXml = _lastResults is null
                 ? _currentXmlContent

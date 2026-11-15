@@ -25,12 +25,24 @@ public sealed class EventJournal
 
     public string JournalFilePath => _journalFilePath;
 
-    public void RecordEvent(string message, EventPriority priority)
+    public bool RecordEvent(string message, EventPriority priority)
     {
         string line = $"{DateTime.Now:dd.MM.yyyy HH:mm:ss} {ToText(priority)}. {message}";
-        lock (_writeLock)
+        try
         {
-            File.AppendAllText(_journalFilePath, line + Environment.NewLine, Encoding.UTF8);
+            lock (_writeLock)
+            {
+                File.AppendAllText(_journalFilePath, line + Environment.NewLine, Encoding.UTF8);
+            }
+            return true;
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
         }
     }
 
