@@ -5,6 +5,7 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
 using StudentPerformanceXml.Analyzers;
 using StudentPerformanceXml.Models;
+using StudentPerformanceXml.Saving;
 using StudentPerformanceXml.Services;
 using StudentPerformanceXml.Storage;
 
@@ -45,7 +46,6 @@ public partial class MainPage : ContentPage
             if (SubjectPicker.SelectedIndex >= 0) SubjectCheckBox.IsChecked = true;
         };
     }
-
 
     private async void OnOpenXmlClicked(object sender, EventArgs e)
     {
@@ -127,7 +127,7 @@ public partial class MainPage : ContentPage
 
         try
         {
-            IXmlAnalyzer analyzer = CreateSelectedAnalyzer();  
+            IXmlAnalyzer analyzer = CreateSelectedAnalyzer();
             _lastResults = analyzer.AnalyzeData(_currentXmlContent, parameters);
             EventJournal.GetInstance().RecordEvent(
                 $"Параметри: {parameters}. Метод: {analyzer.MethodName}. Знайдено: {_lastResults.Count}",
@@ -239,6 +239,42 @@ public partial class MainPage : ContentPage
         catch (XmlException ex)
         {
             await ShowError($"Некоректний XML/XSL: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            await ShowError(ex.Message);
+        }
+    }
+
+    private async void OnSaveXmlClicked(object sender, EventArgs e)
+    {
+        await SaveFilteredAsync(new XmlSaveManager(_storage));
+    }
+
+    private async Task SaveFilteredAsync(SaveManager manager)
+    {
+        if (_currentXmlPath is null || _lastResults is null)
+        {
+            await DisplayAlert("Увага", "Спочатку виконайте пошук.", "OK");
+            return;
+        }
+
+        if (_lastResults.Count == 0)
+        {
+            await DisplayAlert("Увага", "Немає даних для збереження: пошук нічого не знайшов.", "OK");
+            return;
+        }
+
+        try
+        {
+            string fileName = $"{Path.GetFileNameWithoutExtension(_currentXmlPath)}_filtered_{DateTime.Now:yyyyMMdd_HHmmss}";
+            manager.OpenFile(Path.Combine(AppPaths.OutputDirectory, fileName));
+            manager.SetData(_lastResults, _rootName);
+
+            if (await manager.SaveAsync())
+                await DisplayAlert("Збережено", $"Фрагмент збережено у файл:\n{manager.OpenedFilePath}", "OK");
+            else
+                await ShowError($"Не вдалося записати файл {manager.OpenedFilePath}");
         }
         catch (Exception ex)
         {
