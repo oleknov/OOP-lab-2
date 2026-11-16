@@ -8,6 +8,7 @@ using StudentPerformanceXml.Models;
 using StudentPerformanceXml.Saving;
 using StudentPerformanceXml.Services;
 using StudentPerformanceXml.Storage;
+using CommunityToolkit.Maui.Storage;
 
 namespace StudentPerformanceXml;
 
@@ -376,7 +377,15 @@ public partial class MainPage : ContentPage
         try
         {
             string fileName = $"{Path.GetFileNameWithoutExtension(_currentFileName)}_filtered_{DateTime.Now:yyyyMMdd_HHmmss}";
-            manager.OpenFile(toDrive ? fileName : Path.Combine(AppPaths.OutputDirectory, fileName));
+            string targetPath = fileName;
+            if (!toDrive)
+            {
+                string? folder = await ChooseLocalFolderAsync();
+                if (folder is null) return;
+                targetPath = Path.Combine(folder, fileName);
+            }
+
+            manager.OpenFile(targetPath);
             manager.SetData(_lastResults, _rootName);
 
             bool saved = await Task.Run(() => manager.SaveAsync());
@@ -400,6 +409,12 @@ public partial class MainPage : ContentPage
         {
             await ShowError($"Некоректний XSL: {ex.Message}");
         }
+    }
+
+    private static async Task<string?> ChooseLocalFolderAsync()
+    {
+        FolderPickerResult result = await FolderPicker.Default.PickAsync(AppPaths.OutputDirectory, CancellationToken.None);
+        return result.IsSuccessful ? result.Folder?.Path : null;
     }
 
     private async Task<string?> PickXslAsync()

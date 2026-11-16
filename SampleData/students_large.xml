@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StudentPerformance>
+  <Student FullName="Дяченко Михайло Степанович" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-31" Course="3" AdmissionYear="2023">
+    <Subject Name="Операційні системи" Mark="69" />
+    <Subject Name="Теорія алгоритмів" Mark="72" />
+    <Subject Name="Комп'ютерні мережі" Mark="79" />
+    <Subject Name="Чисельні методи" Mark="95" />
+    <Subject Name="Бази даних" Mark="65" />
+    <Subject Name="Теорія ймовірностей" Mark="73" />
+  </Student>
+  <Student FullName="Яковенко Іван Олегович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра теорії та технології програмування" Group="К-42" Course="4">
+    <Subject Name="Проєктування програмного забезпечення" Mark="63" />
+    <Subject Name="Криптографія" Mark="72" />
+    <Subject Name="Комп'ютерна графіка" Mark="70" />
+    <Subject Name="Розподілені системи" Mark="60" />
+  </Student>
+  <Student FullName="Приходько Олена Петрівна" Faculty="Механіко-математичний факультет" Department="Кафедра теоретичної та прикладної механіки" Course="1" Scholarship="Так" AdmissionYear="2025">
+    <Subject Name="Основи програмування" Mark="61" />
+    <Subject Name="Англійська мова" Mark="50" />
+    <Subject Name="Дискретна математика" Mark="76" />
+    <Subject Name="Математичний аналіз" Mark="69" />
+    <Subject Name="Алгебра і геометрія" Mark="66" />
+  </Student>
+  <Student FullName="Пономаренко Ярослав Петрович" Department="Кафедра математичного аналізу" Course="2" Scholarship="Так">
+    <Subject Name="Математичний аналіз" Mark="100" />
+    <Subject Name="Бази даних" Mark="90" />
+    <Subject Name="Математична логіка" Mark="90" />
+    <Subject Name="Теорія ймовірностей" Mark="96" />
+    <Subject Name="Диференціальні рівняння" Mark="96" />
+  </Student>
+  <Student FullName="Гнатюк Богдан Юрійович" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-31" Course="3" StudyForm="Бюджет">
+    <Subject Name="Чисельні методи" Mark="84" />
+    <Subject Name="Теорія алгоритмів" Mark="79" />
+    <Subject Name="Комп'ютерні мережі" Mark="65" />
+    <Subject Name="Операційні системи" Mark="75" />
+    <Subject Name="Бази даних" Mark="76" />
+    <Subject Name="Теорія ймовірностей" Mark="90" />
+  </Student>
+  <Student FullName="Нестеренко Вікторія Юріївна" Faculty="Механіко-математичний факультет" Department="Кафедра теоретичної та прикладної механіки" Group="М-12" StudyForm="Бюджет">
+    <Subject Name="Англійська мова" Mark="86" />
+    <Subject Name="Алгебра і геометрія" Mark="87" />
+    <Subject Name="Основи програмування" Mark="95" />
+  </Student>
+  <Student FullName="Кравченко Олександр Сергійович" Faculty="Факультет інформаційних технологій" Department="Кафедра програмних систем і технологій" Group="ІТ-23" Course="2" AdmissionYear="2024">
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="95" />
+    <Subject Name="Диференціальні рівняння" Mark="100" />
+    <Subject Name="Бази даних" Mark="100" />
+    <Subject Name="Математичний аналіз" Mark="90" />
+    <Subject Name="Теорія ймовірностей" Mark="99" />
+    <Subject Name="Математична логіка" Mark="100" />
+  </Student>
+  <Student FullName="Остапчук Ірина Петрівна" Faculty="Механіко-математичний факультет" Department="Кафедра алгебри та комп'ютерної математики" Group="М-23" Course="2" AdmissionYear="2024">
+    <Subject Name="Математична логіка" Mark="82" />
+    <Subject Name="Диференціальні рівняння" Mark="94" />
+  </Student>
+  <Student FullName="Петренко Олександр Іванович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра інтелектуальних програмних систем" Group="К-33" Course="3" AdmissionYear="2023">
+    <Subject Name="Бази даних" Mark="56" />
+    <Subject Name="Комп'ютерні мережі" Mark="51" />
+    <Subject Name="Чисельні методи" Mark="51" />
+    <Subject Name="Теорія ймовірностей" Mark="57" />
+  </Student>
+  <Student FullName="Бондаренко Вікторія Степанівна" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра теорії та технології програмування" Group="К-12" Course="1" StudyForm="Бюджет">
+    <Subject Name="Математичний аналіз" Mark="77" />
+    <Subject Name="Алгебра і геометрія" Mark="86" />
+    <Subject Name="Англійська мова" Mark="86" />
+    <Subject Name="Основи програмування" Mark="57" />
+  </Student>
+  <Student FullName="Гончаренко Катерина Володимирівна" Faculty="Факультет інформаційних технологій" Department="Кафедра програмних систем і технологій" Group="ІТ-12">
+    <Subject Name="Основи програмування" Mark="64" />
+    <Subject Name="Дискретна математика" Mark="55" />
+    <Subject Name="Алгебра і геометрія" Mark="79" />
+    <Subject Name="Математичний аналіз" Mark="67" />
+  </Student>
+  <Student FullName="Литвиненко Софія Петрівна" Faculty="Механіко-математичний факультет" Department="Кафедра математичного аналізу" Group="М-31" Course="3" StudyForm="Контракт" Scholarship="Ні" AdmissionYear="2023">
+    <Subject Name="Комп'ютерні мережі" Mark="38" />
+    <Subject Name="Теорія ймовірностей" Mark="58" />
+    <Subject Name="Операційні системи" Mark="58" />
+    <Subject Name="Теорія алгоритмів" Mark="40" />
+  </Student>
+  <Student FullName="Демченко Дмитро Васильович" Faculty="Факультет інформаційних технологій" Group="ІТ-12" Scholarship="Так" AdmissionYear="2025">
+    <Subject Name="Основи програмування" Mark="99" />
+    <Subject Name="Дискретна математика" Mark="83" />
+    <Subject Name="Алгебра і геометрія" Mark="79" />
+    <Subject Name="Математичний аналіз" Mark="74" />
+    <Subject Name="Англійська мова" Mark="85" />
+  </Student>
+  <Student FullName="Олійник Михайло Іванович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра теорії та технології програмування" Course="1">
+    <Subject Name="Дискретна математика" Mark="83" />
+    <Subject Name="Алгебра і геометрія" Mark="70" />
+    <Subject Name="Англійська мова" Mark="68" />
+    <Subject Name="Основи програмування" Mark="80" />
+    <Subject Name="Математичний аналіз" Mark="84" />
+  </Student>
+  <Student FullName="Зінченко Богдан Сергійович" Faculty="Факультет комп'ютерних наук та кібернетики" Course="4">
+    <Subject Name="Машинне навчання" Mark="48" />
+    <Subject Name="Комп'ютерна графіка" Mark="52" />
+    <Subject Name="Розподілені системи" Mark="53" />
+  </Student>
+  <Student FullName="Руденко Ярослав Сергійович" Faculty="Факультет інформаційних технологій" Group="ІТ-33" Course="3" AdmissionYear="2023">
+    <Subject Name="Теорія алгоритмів" Mark="65" />
+    <Subject Name="Операційні системи" Mark="70" />
+    <Subject Name="Комп'ютерні мережі" Mark="72" />
+  </Student>
+  <Student FullName="Лисенко Дарина Петрівна" Faculty="Факультет інформаційних технологій" Group="ІТ-33" Course="3">
+    <Subject Name="Бази даних" Mark="58" />
+    <Subject Name="Чисельні методи" Mark="65" />
+    <Subject Name="Теорія ймовірностей" Mark="65" />
+    <Subject Name="Операційні системи" Mark="61" />
+  </Student>
+  <Student FullName="Марченко Михайло Юрійович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра інтелектуальних програмних систем" Group="К-33" Course="3" StudyForm="Бюджет" />
+  <Student FullName="Сидоренко Іван Петрович" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-33" Course="3" StudyForm="Бюджет">
+    <Subject Name="Операційні системи" Mark="75" />
+    <Subject Name="Комп'ютерні мережі" Mark="78" />
+  </Student>
+  <Student FullName="Савченко Ірина Ігорівна" Faculty="Факультет інформаційних технологій" Group="ІТ-32" Course="3" StudyForm="Бюджет" Scholarship="Ні">
+    <Subject Name="Операційні системи" Mark="100" />
+    <Subject Name="Бази даних" Mark="100" />
+    <Subject Name="Теорія алгоритмів" Mark="93" />
+    <Subject Name="Теорія ймовірностей" Mark="92" />
+  </Student>
+  <Student FullName="Павленко Софія Іванівна" Faculty="Механіко-математичний факультет" Department="Кафедра математичного аналізу" Group="М-41" Course="4" StudyForm="Бюджет">
+    <Subject Name="Криптографія" Mark="99" />
+    <Subject Name="Комп'ютерна графіка" Mark="85" />
+    <Subject Name="Машинне навчання" Mark="100" />
+    <Subject Name="Розподілені системи" Mark="100" />
+    <Subject Name="Проєктування програмного забезпечення" Mark="100" />
+  </Student>
+  <Student FullName="Романенко Дарина Ігорівна" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-32" StudyForm="Бюджет" Scholarship="Так">
+    <Subject Name="Операційні системи" Mark="82" />
+    <Subject Name="Бази даних" Mark="66" />
+    <Subject Name="Комп'ютерні мережі" Mark="66" />
+    <Subject Name="Теорія алгоритмів" Mark="64" />
+  </Student>
+  <Student FullName="Клименко Софія Васильівна" Faculty="Механіко-математичний факультет" Department="Кафедра теоретичної та прикладної механіки" Group="М-22" Course="2" StudyForm="Контракт">
+    <Subject Name="Математичний аналіз" Mark="67" />
+    <Subject Name="Теорія ймовірностей" Mark="63" />
+  </Student>
+  <Student FullName="Захарченко Ярослав Сергійович" Faculty="Механіко-математичний факультет" Department="Кафедра математичного аналізу" Group="М-32" Course="3" StudyForm="Бюджет" Scholarship="Ні">
+    <Subject Name="Комп'ютерні мережі" Mark="76" />
+    <Subject Name="Теорія алгоритмів" Mark="86" />
+    <Subject Name="Операційні системи" Mark="88" />
+    <Subject Name="Чисельні методи" Mark="82" />
+  </Student>
+  <Student FullName="Карпенко Остап Ігорович" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-33" Course="3" StudyForm="Контракт" AdmissionYear="2023">
+    <Subject Name="Бази даних" Mark="90" />
+    <Subject Name="Теорія алгоритмів" Mark="88" />
+    <Subject Name="Операційні системи" Mark="83" />
+    <Subject Name="Комп'ютерні мережі" Mark="90" />
+  </Student>
+  <Student FullName="Мельник Юлія Ігорівна" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра інтелектуальних програмних систем" Group="К-23" Course="2" Scholarship="Ні">
+    <Subject Name="Бази даних" Mark="96" />
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="83" />
+    <Subject Name="Диференціальні рівняння" Mark="92" />
+    <Subject Name="Математичний аналіз" Mark="86" />
+    <Subject Name="Теорія ймовірностей" Mark="80" />
+    <Subject Name="Математична логіка" Mark="98" />
+  </Student>
+  <Student FullName="Ткаченко Анна Васильівна" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-12" Scholarship="Ні">
+    <Subject Name="Основи програмування" Mark="78" />
+    <Subject Name="Англійська мова" Mark="80" />
+  </Student>
+  <Student FullName="Коваленко Олександр Олегович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра інтелектуальних програмних систем" Group="К-12" Course="1" StudyForm="Контракт" Scholarship="Ні">
+    <Subject Name="Алгебра і геометрія" Mark="100" />
+    <Subject Name="Англійська мова" Mark="77" />
+    <Subject Name="Дискретна математика" Mark="93" />
+    <Subject Name="Основи програмування" Mark="95" />
+    <Subject Name="Математичний аналіз" Mark="75" />
+  </Student>
+  <Student FullName="Тимошенко Вікторія Степанівна" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра інтелектуальних програмних систем" Group="К-31" StudyForm="Бюджет" Scholarship="Так">
+    <Subject Name="Чисельні методи" Mark="72" />
+    <Subject Name="Операційні системи" Mark="64" />
+    <Subject Name="Теорія алгоритмів" Mark="60" />
+    <Subject Name="Бази даних" Mark="78" />
+    <Subject Name="Теорія ймовірностей" Mark="69" />
+    <Subject Name="Комп'ютерні мережі" Mark="75" />
+  </Student>
+  <Student FullName="Шевченко Богдан Іванович" Faculty="Механіко-математичний факультет" Department="Кафедра алгебри та комп'ютерної математики" Course="2">
+    <Subject Name="Теорія ймовірностей" Mark="64" />
+    <Subject Name="Бази даних" Mark="75" />
+    <Subject Name="Математичний аналіз" Mark="89" />
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="60" />
+    <Subject Name="Диференціальні рівняння" Mark="82" />
+    <Subject Name="Математична логіка" Mark="72" />
+  </Student>
+  <Student FullName="Юрченко Марія Андріївна" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-43" Course="4" Scholarship="Так">
+    <Subject Name="Машинне навчання" Mark="68" />
+    <Subject Name="Проєктування програмного забезпечення" Mark="55" />
+    <Subject Name="Комп'ютерна графіка" Mark="67" />
+  </Student>
+  <Student FullName="Мазур Тарас Степанович" Department="Кафедра інтелектуальних програмних систем" Group="К-33" Course="3" StudyForm="Бюджет">
+    <Subject Name="Теорія ймовірностей" Mark="86" />
+    <Subject Name="Бази даних" Mark="71" />
+    <Subject Name="Операційні системи" Mark="79" />
+    <Subject Name="Комп'ютерні мережі" Mark="84" />
+    <Subject Name="Чисельні методи" Mark="95" />
+    <Subject Name="Теорія алгоритмів" Mark="66" />
+  </Student>
+  <Student FullName="Василенко Юлія Іванівна" Faculty="Механіко-математичний факультет" Department="Кафедра математичного аналізу" Group="М-43" Course="4">
+    <Subject Name="Проєктування програмного забезпечення" Mark="58" />
+    <Subject Name="Розподілені системи" Mark="78" />
+  </Student>
+  <Student FullName="Ковальчук Іван Михайлович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра теорії та технології програмування" Group="К-22" Course="2" StudyForm="Бюджет" Scholarship="Так">
+    <Subject Name="Бази даних" Mark="65" />
+    <Subject Name="Математична логіка" Mark="71" />
+    <Subject Name="Математичний аналіз" Mark="78" />
+    <Subject Name="Диференціальні рівняння" Mark="78" />
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="75" />
+    <Subject Name="Теорія ймовірностей" Mark="69" />
+  </Student>
+  <Student FullName="Іваненко Дарина Андріївна" Faculty="Факультет інформаційних технологій" Department="Кафедра програмних систем і технологій" Group="ІТ-21" Course="2" StudyForm="Бюджет" AdmissionYear="2024">
+    <Subject Name="Математична логіка" Mark="86" />
+    <Subject Name="Бази даних" Mark="91" />
+  </Student>
+  <Student FullName="Шевчук Дмитро Сергійович" Faculty="Факультет комп'ютерних наук та кібернетики" Department="Кафедра математичної інформатики" Course="2" StudyForm="Бюджет" Scholarship="Так">
+    <Subject Name="Математична логіка" Mark="80" />
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="100" />
+    <Subject Name="Теорія ймовірностей" Mark="100" />
+    <Subject Name="Математичний аналіз" Mark="100" />
+    <Subject Name="Диференціальні рівняння" Mark="99" />
+    <Subject Name="Бази даних" Mark="82" />
+  </Student>
+  <Student FullName="Гаврилюк Вікторія Андріївна" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-12" Course="1" AdmissionYear="2025">
+    <Subject Name="Математичний аналіз" Mark="70" />
+    <Subject Name="Дискретна математика" Mark="62" />
+  </Student>
+  <Student FullName="Левченко Софія Сергіївна" Faculty="Факультет інформаційних технологій" Department="Кафедра мережевих та інтернет-технологій" Group="ІТ-41" Course="4" Scholarship="Ні" AdmissionYear="2022">
+    <Subject Name="Машинне навчання" Mark="86" />
+    <Subject Name="Криптографія" Mark="100" />
+    <Subject Name="Комп'ютерна графіка" Mark="99" />
+    <Subject Name="Проєктування програмного забезпечення" Mark="86" />
+  </Student>
+  <Student FullName="Кузьменко Дарина Олегівна" Faculty="Механіко-математичний факультет" Department="Кафедра математичного аналізу" Group="М-32" Course="3" StudyForm="Контракт" Scholarship="Ні">
+    <Subject Name="Теорія алгоритмів" Mark="77" />
+    <Subject Name="Операційні системи" Mark="75" />
+    <Subject Name="Чисельні методи" Mark="87" />
+    <Subject Name="Комп'ютерні мережі" Mark="85" />
+  </Student>
+  <Student FullName="Поліщук Остап Ігорович" Faculty="Механіко-математичний факультет" Department="Кафедра теоретичної та прикладної механіки" Group="М-22" Course="2" StudyForm="Бюджет" Scholarship="Ні" AdmissionYear="2024">
+    <Subject Name="Математична логіка" Mark="76" />
+    <Subject Name="Диференціальні рівняння" Mark="77" />
+    <Subject Name="Об'єктно-орієнтоване програмування" Mark="71" />
+    <Subject Name="Бази даних" Mark="81" />
+    <Subject Name="Теорія ймовірностей" Mark="67" />
+    <Subject Name="Математичний аналіз" Mark="71" />
+  </Student>
+</StudentPerformance>

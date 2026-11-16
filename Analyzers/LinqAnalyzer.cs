@@ -3,7 +3,6 @@ using StudentPerformanceXml.Models;
 
 namespace StudentPerformanceXml.Analyzers;
 
-// LINQ to XML: документ завантажується в XDocument, запит нарощується умовами Where залежно від вибраних параметрів.
 public class LinqAnalyzer : IXmlAnalyzer
 {
     public string MethodName => "LINQ to XML";
